@@ -16,4 +16,6 @@
 
 `npm start` - To start app in developement server(for react app)
 
+`run todoDatabaseSetup.sql in MySQL for creating necessary tables in database.`
+
 ###End
