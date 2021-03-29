@@ -1,11 +1,22 @@
+import axios from 'axios'
 import React, {useState} from 'react'
 
-function Header() {
+function Header({userName, isLoggedIn, setAuthToken, authToken}) {
 
-    const [logedIn, setLogedIn] = useState(true)
-
-    const logout = () => {
-        setLogedIn(prevState => !prevState)
+    const logOut= ()=>{
+        axios({
+            method:'get',
+            url:'http://localhost:8080/logout',
+            headers:{
+                auth:authToken
+            }
+        }).then(res => {
+            console.log(res)
+            window.localStorage.removeItem('TodoListData')
+            setAuthToken(null)
+        }).catch(e => {
+            console.log(e)
+        })
     }
 
     return (
@@ -14,12 +25,12 @@ function Header() {
                 <h1 className='logo'>TO-Do &#10004;</h1>
                 <div>
                     {
-                        logedIn ? 
+                        isLoggedIn ? 
                         <>
-                            <label>Ankit Sharma</label><button onClick={logout}>Logout</button>
+                            <label>{userName}</label><button onClick={logOut}>Logout</button>
                         </> :
                         <>
-                            <label>You should Login</label>
+                            <label>{userName}</label>
                         </>
                     }
                 </div>

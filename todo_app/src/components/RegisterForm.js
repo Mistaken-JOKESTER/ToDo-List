@@ -1,14 +1,31 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 
-function RegisterForm(isLoggedIn, show, setShowForm) {
-    console.log(isLoggedIn , show)
+function RegisterForm({show, setShowForm, focusRef, setError}) {
 
+    
     const [registerData, setRegisterData] = useState({first_name:'', last_name:'', user_email:'', user_password:''})
-    const [button, setButton] = useState(false)
 
-    const resgisterHandler = () => {
-
+    const resgisterHandler = (e) => {
+        e.preventDefault()
+        axios({
+            method:'post',
+            url:'http://localhost:8080/register',
+            data:{
+                ...registerData
+            }
+        }).then(res => {
+            console.log(res)
+            if(res.data.error){
+                console.log(res.data.error)
+                setError(res.data.error.message)
+            } else {
+                setRegisterData({first_name:'', last_name:'', user_email:'', user_password:''})
+            }
+        }).catch(e => {
+            console.log(e)
+            setError('Server is down.')
+        })
     }
 
     let element = <div>
@@ -24,6 +41,7 @@ function RegisterForm(isLoggedIn, show, setShowForm) {
                                             prevState => ({ ...prevState, first_name:e.target.value}))} 
                                     type='text' 
                                     value={registerData.first_name} 
+                                    ref={focusRef}
                                     required
                                 />
                         </div>
@@ -61,15 +79,16 @@ function RegisterForm(isLoggedIn, show, setShowForm) {
                                 />
                         </div>
                         <div>
-                            <button disabled={button}>Register</button>
+                            <button>Register</button>
                         </div>
                     </form>
+                    <button onClick={() => setShowForm(1)} className="formChange">Login</button>
                 </div>
 
     return (
         <>
         {
-            isLoggedIn?element:null
+            show?element:null
         }
         </>
     )

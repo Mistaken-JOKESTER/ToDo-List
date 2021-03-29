@@ -1,13 +1,37 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 
-function LoginForm({show, setShowForm, isLoggedIn}) {
+function LoginForm({show, setShowForm, focusRef, setAuthToken, setUserName, setError}) {
 
     const [loginData, setLoginData] = useState({user_email:'', user_password:''})
-    const [button, setButton] = useState(false)
 
     const loginHandler = e => {
-        
+        e.preventDefault()
+        axios({
+            method:'post',
+            url:'http://localhost:8080/Login',
+            data:{
+                ...loginData
+            }
+        }).then(res => {
+            console.log(res)
+            if(res.data.error){
+                console.log(res.data.error)
+                setError(res.data.error.message)
+            } else {
+                setAuthToken(res.data.accessToken)
+                setUserName(res.data.user.first_name + " " + res.data.user.last_name)
+                
+                const data = {
+                    name : res.data.user.first_name + " " + res.data.user.last_name,
+                    authToken : res.data.accessToken
+                }
+                window.localStorage.setItem("TodoListData", JSON.stringify(data))
+            }
+        }).catch(e => {
+            console.log(e)
+            setError('Server is down.')
+        })
     }
 
     let element = <div>
@@ -23,6 +47,7 @@ function LoginForm({show, setShowForm, isLoggedIn}) {
                                     prevState => ({ ...prevState, user_email:e.target.value}))} 
                             type='email' 
                             value={loginData.user_email} 
+                            ref={focusRef} 
                             required 
                         />
                         </div>
@@ -37,16 +62,16 @@ function LoginForm({show, setShowForm, isLoggedIn}) {
                             required />
                         </div>
                         <div>
-                            <button disabled={button}>Login</button>
+                            <button>Login</button>
                         </div>
                     </form>
-                    <button onClick={() => setShowForm(-1)}></button>
+                    <button onClick={() => setShowForm(-1)} className="formChange">Register</button>
                 </div>
     
     return (
         <>
         {
-            !isLoggedIn && show?element:null
+            show?element:null
         }
         </>
     )

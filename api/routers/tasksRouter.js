@@ -9,7 +9,7 @@ router.get('/tasks/:value', userAuth, (req, res) => {
     try{
         console.log(req.userID)
         const { value } = req.params
-        let query = sql.findTaks + ` user_id = ${Number(req.userID)}`
+        let query = sql.findTaks + ` user_id = ${Number(req.userID)} ORDER BY task_id DESC`
         
         if ( value === 'completed'){
             query = query + ' AND task_status = 1'
@@ -62,7 +62,7 @@ router.post('/addtask', userAuth, (req, res) => {
                     if(!results.affectedRows){
                         return res.send({error:{message:'Failed to add task try again', status:500}, data:{discription:req.body.discription}})
                     }
-                    res.send({message:'task added successfully', discription})
+                    res.send({message:'task added successfully', tasks_id : results.insertId, discription})
                 }
             })
         })

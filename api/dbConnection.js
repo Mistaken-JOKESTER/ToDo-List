@@ -5,7 +5,8 @@ var pool = mysql.createPool({
     user     : 'ankit',
     password : '1998',
     database : 'todo',
-    insecureAuth : true
+    insecureAuth : true,
+    multipleStatements: true
 })
 
 module.exports = pool
