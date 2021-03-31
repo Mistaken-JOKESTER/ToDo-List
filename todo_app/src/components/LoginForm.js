@@ -3,10 +3,15 @@ import axios from 'axios'
 
 function LoginForm({show, setShowForm, focusRef, setAuthToken, setUserName, setError}) {
 
+    //State for login email and password
     const [loginData, setLoginData] = useState({user_email:'', user_password:''})
 
+    //Function for handling login(submition of form)
     const loginHandler = e => {
+        //Preventing page from refresh
         e.preventDefault()
+
+        //Making post request to api for login
         axios({
             method:'post',
             url:'http://localhost:8080/Login',
@@ -14,14 +19,16 @@ function LoginForm({show, setShowForm, focusRef, setAuthToken, setUserName, setE
                 ...loginData
             }
         }).then(res => {
-            console.log(res)
+            //Checking response
             if(res.data.error){
-                console.log(res.data.error)
+                //showing errors
                 setError(res.data.error.message)
             } else {
+                //Seting state of token and userName
                 setAuthToken(res.data.accessToken)
                 setUserName(res.data.user.first_name + " " + res.data.user.last_name)
                 
+                //Storing username and token to local storage
                 const data = {
                     name : res.data.user.first_name + " " + res.data.user.last_name,
                     authToken : res.data.accessToken
@@ -29,11 +36,13 @@ function LoginForm({show, setShowForm, focusRef, setAuthToken, setUserName, setE
                 window.localStorage.setItem("TodoListData", JSON.stringify(data))
             }
         }).catch(e => {
+            //Errors occured during request
             console.log(e)
             setError('Server is down.')
         })
     }
 
+    //Jsx for login form
     let element = <div>
                     <form onSubmit={loginHandler}>
                         <div>
@@ -68,6 +77,7 @@ function LoginForm({show, setShowForm, focusRef, setAuthToken, setUserName, setE
                     <button onClick={() => setShowForm(-1)} className="formChange">Register</button>
                 </div>
     
+    //rendering JSX
     return (
         <>
         {

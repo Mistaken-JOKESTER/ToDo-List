@@ -2,7 +2,10 @@ import React from 'react'
 import List from './List'
 import axios from 'axios'
 
+//Redner all tasks
 function TaskList({todos, setTodos, token, setError}) {
+
+    //Request to mark task as complete in database
     const completeTask = (id) => {
         axios({
             url:`http://localhost:8080/completeTask/${id}`,
@@ -11,12 +14,12 @@ function TaskList({todos, setTodos, token, setError}) {
                 auth:token
             }
         }).then(res => {
-            console.log(res)
+            //checking if any errors
             if(res.data.error){
-                console.log(res.data.error)
+                //setting error state to show errors to user
                 setError(res.data.error.message)
             } else { 
-                //setTodos(todos.filter(item => item.task_id !== id))
+                //updating given task in todos state
                 setTodos(todos.map(item => {
                     if(item.task_id === id){
                         return {
@@ -29,10 +32,12 @@ function TaskList({todos, setTodos, token, setError}) {
                 }))
             }
         }).catch(e => {
+            //Network or internal errors during request
             console.log(e)
         })
     }
 
+    //Request for deleting task from database
     const deleteTask = (id) => {
         axios({
             url:`http://localhost:8080/deletetask/${id}`,
@@ -41,19 +46,22 @@ function TaskList({todos, setTodos, token, setError}) {
                 auth:token
             }
         }).then(res => {
-            console.log(res)
+            //checking if any errors
             if(res.data.error){
-                console.log(res.data.error)
+                //setting error state to show error to user
                 setError(res.data.error.message)
             } else{ 
+                //Updating todos state
                 setTodos(todos.filter(item => item.task_id !== id))
             }
         }).catch(e => {
+            //Network or internal errors during request
             console.log(e)
             setError('Server is down.')
         })
     }
 
+    //Rendring JSX
     return (
         <div>
             {

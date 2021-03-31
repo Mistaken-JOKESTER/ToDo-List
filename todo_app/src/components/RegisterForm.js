@@ -3,11 +3,16 @@ import axios from 'axios'
 
 function RegisterForm({show, setShowForm, focusRef, setError}) {
 
-    
+    //State for regestratin form data
     const [registerData, setRegisterData] = useState({first_name:'', last_name:'', user_email:'', user_password:''})
 
+    //Function for handling regestration(registration from)
     const resgisterHandler = (e) => {
+
+        //Preventing page form refreshing
         e.preventDefault()
+
+        //Post request to api for regestration
         axios({
             method:'post',
             url:'http://localhost:8080/register',
@@ -15,19 +20,22 @@ function RegisterForm({show, setShowForm, focusRef, setError}) {
                 ...registerData
             }
         }).then(res => {
-            console.log(res)
+            //checking if errors exist
             if(res.data.error){
-                console.log(res.data.error)
+                //seting error state to show errors
                 setError(res.data.error.message)
             } else {
+                //clearing input form
                 setRegisterData({first_name:'', last_name:'', user_email:'', user_password:''})
             }
         }).catch(e => {
+            //Network or internal errors during request
             console.log(e)
             setError('Server is down.')
         })
     }
 
+    //JSX for regestration form
     let element = <div>
                     <form onSubmit={resgisterHandler}>
                         <div>
@@ -85,6 +93,7 @@ function RegisterForm({show, setShowForm, focusRef, setError}) {
                     <button onClick={() => setShowForm(1)} className="formChange">Login</button>
                 </div>
 
+    //rendring JSX
     return (
         <>
         {

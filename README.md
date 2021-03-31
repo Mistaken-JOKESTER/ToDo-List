@@ -2,11 +2,13 @@
 ##### Made with ReactJS , NodeJs and MySQL
 
 
-> React app is still in development, api is complete and work fine.
-- if you find any issue or bug please tell me, it would help me improve my knowledge and i would be very thankfull to you.
+> React app is still in development, API is complete and work fine.
+- if you find any issue or bug please tell me, it would help me improve my knowledge and I will be very thankful to you.
 
-- Api is made wiht NodeJS and MySql is used for database
-- For front-end ReactJs is used
+- API is made using NodeJS and MySql is used for database
+- For front-end, ReactJs is used
+- If you want to use it for commercial purpose, Please add password hashing.
+
 
 **NodeJs and MySQL  must be installed on your machine to use it.**
 

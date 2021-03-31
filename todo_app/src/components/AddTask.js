@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
+//Add task form
 function AddTask({authToken, addToTodos}) {
 
+    //State for task to be added
     const [task, setTask] = useState('')
 
+    //Form handler for newly added task
     const addHandler = (e) => {
+
+        //preventing page from refresh
         e.preventDefault()
-        console.log(task)
+
+        //sending post request to api for stroing newly created task to database
         axios({
             method:'post',
             url:'http://localhost:8080/addtask',
@@ -18,14 +24,17 @@ function AddTask({authToken, addToTodos}) {
                 discription:task
             }
         }).then(res => {
-            console.log(res)
+            //Adding task to todo state container
             addToTodos({discription: res.data.discription, task_id:res.data.tasks_id})
+            //clearing form feild
             setTask('')
         }).catch(e => {
+            //Network or internal errors during request
             console.log(e)
         })
     }
 
+    //Rendring Jsx
     return (
         <div className='addTask'>
             <form onSubmit={addHandler}>

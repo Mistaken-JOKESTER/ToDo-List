@@ -8,16 +8,19 @@ import RegisterForm from './components/RegisterForm';
 import TaskList from './components/TaskList';
 import fetchTasks from './fucntions/fetchTasks';
 
-export const TokenContext = React.createContext()
-
 function App() {
+
+  //creating reference for input
   const focusRef = useRef(null)
+
+  //States
   const [authToken, setAuthToken] = useState('')
   const [showForm, setShowForm] = useState(1)
   const [userName, setUserName] = useState('Welcome User')
   const [todos, setTodos] = useState([])
   const [error, setError] = useState('')
 
+  //fetching tasks if JSON web token is presend in local storage
   useEffect(() => {
     const data = JSON.parse(window.localStorage.getItem('TodoListData'))
     console.log(data)
@@ -32,15 +35,17 @@ function App() {
   }, [authToken])
 
 
-
+  //Focusing input of login and register form
   useEffect(() => {
     focusInput()
   }, [showForm])
 
+  //function to exexute focus on focusRef
   const focusInput = () => {
     focusRef.current.focus()
   }
 
+  //Function to add to tasks
   const addToTodos = ({discription, task_id}) => {
     setTodos([
       {
@@ -52,10 +57,12 @@ function App() {
     ])
   }
 
+  //Function to clear errors
   const clearError = () => {
     setError('')
   }
 
+  //JSX to be rendered
   return (
     <div className="App">
       <Header
@@ -95,11 +102,8 @@ function App() {
                 setError={setError}
               />
             </h1>
-        }
-       
-        
+        } 
       </main>
-      
     </div>
   );
 }

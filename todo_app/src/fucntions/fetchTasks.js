@@ -1,7 +1,10 @@
 import axios from "axios"
 
+//Fuction to fetch task
+//Executed when starting app if authtoken is present in localstorage
 function fetchTasks(token, setTodos, setError) {
-    let result ={}
+
+    //get request for fetching todos from database
     axios({
         method:'get',
         url:'http://localhost:8080/tasks/all',
@@ -9,21 +12,22 @@ function fetchTasks(token, setTodos, setError) {
             auth: token
         }
     }).then(res => {
+        //chekcing if any errors
         if(res.data.error){
-            console.log(res.data.error)
+            //setting error state to show it to user
             setError(res.data.error.message)
         } else {
-            result.data = res.data
+            //setting todos
             setTodos(res.data)
         }
         console.log(res)
     }).catch(e => {
+        //Network or internal errors during request
         console.log(e)
-        result.data = []
         setError('Server is down.')
     })
-
-    return result
+    
+    return
 }
 
 export default fetchTasks

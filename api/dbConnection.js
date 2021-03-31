@@ -1,4 +1,6 @@
 var mysql      = require('mysql');
+
+//connection serttin for mysql
 var pool = mysql.createPool({
     host     : 'localhost',
     port     :'3306',
